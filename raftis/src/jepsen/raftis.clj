@@ -35,7 +35,8 @@
     (invoke! [this test op]
       (try
         (case (:f op)
-          :read (assoc op :type :ok, :value (parse-long (get (car/wcar conn (car/get "r")) 0 "")))
+          ; :read (assoc op :type :ok, :value (parse-long (get (car/wcar conn (car/get "r")) 0 "")))
+          :read (assoc op :type :ok, :value (parse-long (car/wcar conn (car/get "r"))))
 
           :write (do (car/wcar conn (car/set "r" (:value op)))
                      (assoc op :type, :ok)))
@@ -111,7 +112,7 @@
   (merge tests/noop-test
          {:name "raftis"
           :os debian/os
-          :db (db "v2.0.4")
+          :db (db "v2.1.1")
           :client (client nil)
           :nemesis (nemesis/partition-random-halves)
           :model (model/register 0)
